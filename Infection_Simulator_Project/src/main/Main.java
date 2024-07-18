@@ -1,10 +1,12 @@
 package main;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
-
 	
 	static Random random = new Random();
 	static int infected = 0;
@@ -12,8 +14,10 @@ public class Main {
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-			
-		timeStep timeStepClass = new timeStep();
+		
+		int recovered = 0;
+		int infected = 0;
+		double ratioInf = 0;
 			
 		System.out.println("Enter the number of individuals:");
 		int N = scnr.nextInt();
@@ -45,6 +49,8 @@ public class Main {
 		
 		String [][] individuals = new String[(int) Math.sqrt(N)][(int) Math.sqrt(N)];
 		
+		// String [][] newIndividuals = in 
+		
 		for (int i=0; i<individuals.length; i++) {
 			for (int j=0; j<individuals[i].length; j++) {
 				individuals[i][j] = "S";
@@ -64,9 +70,46 @@ public class Main {
 		*/
 		
 		
-		for (int i = 0; i < T; i++) {
-			goThroughIndividuals(individuals, iRate, rRate);
+		
+		try {
+			
+			for (int i = 0; i < T; i++) {
+				goThroughIndividuals(individuals, iRate, rRate);
+				
+				BufferedWriter textWriter = new BufferedWriter(new FileWriter("C:\\Users\\mughl\\OneDrive\\Desktop\\outputs\\output" + i + ".txt"));
+				
+				for (int a=0; a<individuals.length; a++) {
+					textWriter.write("\n");
+					for (int j=0; j<individuals[a].length; j++) {
+						textWriter.write(individuals[a][j] + " ");
+						
+					}
+				}
+				
+				textWriter.close();
+				
+				for (int b=0; b<individuals.length; b++) {
+					for (int c=0; c<individuals[b].length; c++) {
+						if (individuals[b][c]=="R") {
+							recovered++;
+						} else if (individuals[b][c]=="I") {
+							infected++;
+						}
+					}
+				}
+				
+				System.out.println("The number of recovered people is: " + recovered);
+				System.out.println("The number of infected people is: " + infected);
+				System.out.println("The ratio of infected people is: " + ((double) infected/N));
+
+				
+			}
+		
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+		
+		
 		
 		
 		
@@ -137,6 +180,7 @@ public class Main {
 		}
 		
 		System.out.println();
+		
 	}
 	
 	
