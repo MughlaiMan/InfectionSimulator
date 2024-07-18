@@ -56,17 +56,15 @@ public class Main {
 		
 		individuals[rand1][rand2] = "I";
 		
-		// for a 12 by 12 array: individuals[11][11] = "I";
-
-		System.out.print(individuals[0][individuals[0].length-1]);
-		
 		timeStepClass.setNumIndividuals(N);
 		timeStepClass.setNumTimeSteps(T);
 		timeStepClass.setInfectionRate(iRate);
 		timeStepClass.setRecoveryRate(rRate);
 		
+		
 		for (int i=0; i<individuals.length; i++) {
 			for (int j=0; j<individuals[i].length; j++) {
+				
 				
 				if (i==0 && j==0) {
 					updateTopLeft(individuals, iRate, rRate);
@@ -85,9 +83,36 @@ public class Main {
 					updateBottomRight(individuals, iRate, rRate, i, j);
 				}
 				
+				
+				if (j==0 && i>0 && i<individuals.length-1) {
+					updateLeftColumn(individuals, iRate, rRate, i, j);
+				}
+				
+				if (i==0 && j>0 && j<individuals.length-1) {
+					updateTopRow(individuals, iRate, rRate, i, j);
+				}
+				
+				if (j==individuals.length-1 && i>0 && i<individuals.length-1) {
+					updateRightColumn(individuals, iRate, rRate, i, j);
+				}
+				
+				if (i==individuals.length-1 && j>0 && j<individuals.length-1) {
+					updateBottomRow(individuals, iRate, rRate, i, j);
+				}
+				
+				if (i>0 && i<individuals.length-1 && j>0 && j<individuals.length-1) {
+					updateMiddle(individuals, iRate, rRate, i, j);
+				}
+				
+				
+				
 			}
 			
 		}
+		
+		
+		
+		
 		
 		for (int i=0; i<individuals.length; i++) {
 			System.out.println();
@@ -99,7 +124,203 @@ public class Main {
 	}
 	
 	
+	
+	static void updateMiddle(String[][] individuals, double iRate, double rRate, int i, int j) {
+		
+		if (individuals[i][j] == "I") {
+			boolean isRecovered = randRec(rRate);
+			
+			if (isRecovered == true) {
+				individuals[i][j] = "R";
+			}
+			
+		}
+		
+		if (individuals[i][j]=="S") {
+			if (individuals[i][j-1]=="I") {
+				infected++;
+			}
+			
+			if (individuals[i][j+1]=="I") {
+				infected++;
+			}
+			
+			if (individuals[i-1][j]=="I") {
+				infected++;
+			}
+			
+			if (individuals[i+1][j]=="I") {
+				infected++;
+			}
+			
+			boolean is_Infected = randInf(iRate, infected);
+			
+			if (is_Infected==true) {
+				individuals[i][j] = "I";
+			}
+			
+			infected = 0;
+		}
+		
+		
+	}
+	
+	
+	static void updateBottomRow(String[][] individuals, double iRate, double rRate, int i, int j) {
+		if (individuals[i][j] == "I") {
+			boolean isRecovered = randRec(rRate);
+			
+			if (isRecovered == true) {
+				individuals[i][j] = "R";
+			}
+			
+		}
+		
+		if (individuals[i][j]=="S") {
+			if (individuals[individuals.length-1][j-1]=="I") {
+				infected++;
+			}
+			
+			if (individuals[individuals.length-1][j+1]=="I") {
+				infected++;
+			}
+			
+			if (individuals[individuals.length-2][j]=="I") {
+				infected++;
+			}
+			
+			boolean is_Infected = randInf(iRate, infected);
+			
+			if (is_Infected==true) {
+				individuals[i][j] = "I";
+			}
+			
+			infected = 0;
+		}	
+	}
+	
+	
+	
+	
+	static void updateRightColumn(String[][] individuals, double iRate, double rRate, int i, int j) {
+		if (individuals[i][j] == "I") {
+			boolean isRecovered = randRec(rRate);
+			
+			if (isRecovered == true) {
+				individuals[i][j] = "R";
+			}
+			
+		}
+		
+		if (individuals[i][j]=="S") {
+			if (individuals[i-1][j]=="I") {
+				infected++;
+			}
+			
+			if (individuals[i+1][j]=="I") {
+				infected++;
+			}
+			
+			if (individuals[i][j-1]=="I") {
+				infected++;
+			}
+			
+			boolean is_Infected = randInf(iRate, infected);
+			
+			if (is_Infected==true) {
+				individuals[i][j] = "I";
+			}
+			
+			infected = 0;
+		}	
+	}
+	
+	
+	
+	
+	static void updateTopRow(String [][] individuals, double iRate, double rRate, int i, int j) {
+		if (individuals[i][j] == "I") {
+			boolean isRecovered = randRec(rRate);
+			
+			if (isRecovered == true) {
+				individuals[i][j] = "R";
+			}
+			
+		}
+		
+		if (individuals[i][j]=="S") {
+			if (individuals[0][j-1]=="I") {
+				infected++;
+			}
+			
+			if (individuals[0][j+1]=="I") {
+				infected++;
+			}
+			
+			if (individuals[1][j]=="I") {
+				infected++;
+			}
+			
+			boolean is_Infected = randInf(iRate, infected);
+			
+			if (is_Infected==true) {
+				individuals[i][j] = "I";
+			}
+			
+			infected = 0;
+		}
+		
+	}
+	
+	
+	
+	
+	static void updateLeftColumn (String[][] individuals, double iRate, double rRate, int i, int j) {
+		if (individuals[i][j] == "I") {
+			boolean isRecovered = randRec(rRate);
+			
+			if (isRecovered == true) {
+				individuals[i][j] = "R";
+			}
+			
+		}
+		
+		if (individuals[i][j]=="S") {
+			if (individuals[i-1][0]=="I") {
+				infected++;
+			}
+			
+			if (individuals[i+1][0]=="I") {
+				infected++;
+			}
+			
+			if (individuals[i][1]=="I") {
+				infected++;
+			}
+			
+			boolean is_Infected = randInf(iRate, infected);
+			
+			if (is_Infected==true) {
+				individuals[i][j] = "I";
+			}
+			
+			infected = 0;
+		}
+		
+	}
+	
+	
 	static void updateTopLeft(String individuals[][], double iRate, double rRate) {
+		
+		if (individuals[0][0] == "I") {
+			boolean isRecovered = randRec(rRate);
+			
+			if (isRecovered == true) {
+				individuals[0][0] = "R";
+			}
+			
+		}
+		
 		if (individuals[0][0]=="S") {
 			if (individuals[0][1]=="I") {
 				infected++;
@@ -114,16 +335,10 @@ public class Main {
 			if (is_Infected==true) {
 				individuals[0][0] = "I";
 			}
+			
+			infected = 0;
 		}
 		
-		if (individuals[0][0] == "I") {
-			boolean isRecovered = randRec(rRate);
-			
-			if (isRecovered == true) {
-				individuals[0][0] = "R";
-			}
-			
-		}
 	}
 	
 	
@@ -152,6 +367,8 @@ public class Main {
 			if (is_Infected==true) {
 				individuals[i][j] = "I";
 			}
+			
+			infected = 0;
 		}
 		
 		
@@ -183,6 +400,8 @@ public class Main {
 			if (is_Infected==true) {
 				individuals[i][j] = "I";
 			}
+			
+			infected = 0;
 		}
 		
 	}
@@ -213,6 +432,8 @@ public class Main {
 			if (is_Infected==true) {
 				individuals[i][j] = "I";
 			}
+			
+			infected = 0;
 		}
 		
 	}
