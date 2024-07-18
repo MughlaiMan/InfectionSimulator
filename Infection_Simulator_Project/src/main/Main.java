@@ -56,12 +56,31 @@ public class Main {
 		
 		individuals[rand1][rand2] = "I";
 		
+		/*
 		timeStepClass.setNumIndividuals(N);
 		timeStepClass.setNumTimeSteps(T);
 		timeStepClass.setInfectionRate(iRate);
 		timeStepClass.setRecoveryRate(rRate);
+		*/
 		
 		
+		for (int i = 0; i < T; i++) {
+			goThroughIndividuals(individuals, iRate, rRate);
+		}
+		
+		
+		
+		
+		
+		
+		
+
+	}
+	
+	
+	
+	
+	static void goThroughIndividuals(String[][] individuals, double iRate, double rRate) {
 		for (int i=0; i<individuals.length; i++) {
 			for (int j=0; j<individuals[i].length; j++) {
 				
@@ -103,24 +122,21 @@ public class Main {
 				if (i>0 && i<individuals.length-1 && j>0 && j<individuals.length-1) {
 					updateMiddle(individuals, iRate, rRate, i, j);
 				}
-				
-				
-				
+						
 			}
 			
 		}
-		
-		
-		
 		
 		
 		for (int i=0; i<individuals.length; i++) {
 			System.out.println();
 			for (int j=0; j<individuals[i].length; j++) {
 				System.out.print(individuals[i][j]);
+				System.out.print(" ");
 			}
 		}
-
+		
+		System.out.println();
 	}
 	
 	
