@@ -77,7 +77,7 @@ public class Main {
 			for (int i = 0; i < T; i++) {
 				goThroughIndividuals(individuals, savedIndividuals, iRate, rRate);
 				
-				BufferedWriter textWriter = new BufferedWriter(new FileWriter("C:\\Users\\mughl\\OneDrive\\Desktop\\outputs\\output" + i + ".txt"));
+				BufferedWriter textWriter = new BufferedWriter(new FileWriter("C:\\Users\\mughl\\OneDrive\\Desktop\\outputs" + "\\output" + i + ".txt"));
 				
 				for (int a=0; a<individuals.length; a++) {
 					textWriter.write("\n");
