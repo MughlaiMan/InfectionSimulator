@@ -17,6 +17,7 @@ public class Main {
 		
 		int recovered = 0;
 		int infected = 0;
+		int susceptible = 0;
 		double ratioInf = 0;
 			
 		System.out.println("Enter the number of individuals:");
@@ -49,7 +50,7 @@ public class Main {
 		
 		String [][] individuals = new String[(int) Math.sqrt(N)][(int) Math.sqrt(N)];
 		
-		// String [][] newIndividuals = in 
+		String [][] savedIndividuals = individuals; 
 		
 		for (int i=0; i<individuals.length; i++) {
 			for (int j=0; j<individuals[i].length; j++) {
@@ -74,7 +75,7 @@ public class Main {
 		try {
 			
 			for (int i = 0; i < T; i++) {
-				goThroughIndividuals(individuals, iRate, rRate);
+				goThroughIndividuals(individuals, savedIndividuals, iRate, rRate);
 				
 				BufferedWriter textWriter = new BufferedWriter(new FileWriter("C:\\Users\\mughl\\OneDrive\\Desktop\\outputs\\output" + i + ".txt"));
 				
@@ -94,14 +95,20 @@ public class Main {
 							recovered++;
 						} else if (individuals[b][c]=="I") {
 							infected++;
+						} else if (individuals[b][c]=="S") {
+							susceptible++;
 						}
 					}
 				}
 				
 				System.out.println("The number of recovered people is: " + recovered);
 				System.out.println("The number of infected people is: " + infected);
+				System.out.println("The number of susceptible people is: " + susceptible);
 				System.out.println("The ratio of infected people is: " + ((double) infected/N));
-
+				
+				recovered = 0;
+				infected = 0;
+				susceptible = 0;
 				
 			}
 		
@@ -123,47 +130,47 @@ public class Main {
 	
 	
 	
-	static void goThroughIndividuals(String[][] individuals, double iRate, double rRate) {
-		for (int i=0; i<individuals.length; i++) {
-			for (int j=0; j<individuals[i].length; j++) {
+	static void goThroughIndividuals(String[][] individuals, String[][] savedIndividuals, double iRate, double rRate) {
+		for (int i=0; i<savedIndividuals.length; i++) {
+			for (int j=0; j<savedIndividuals[i].length; j++) {
 				
 				
 				if (i==0 && j==0) {
-					updateTopLeft(individuals, iRate, rRate);
+					updateTopLeft(individuals, savedIndividuals, iRate, rRate);
 				}
 				
 				
-				if (i==0 && j==individuals.length-1) {
-					updateTopRight(individuals, iRate, rRate, i, j);
+				if (i==0 && j==savedIndividuals.length-1) {
+					updateTopRight(individuals, savedIndividuals, iRate, rRate, i, j);
 				}
 				
-				if (i==individuals.length-1 && j==0) {
-					updateBottomLeft(individuals, iRate, rRate, i, j);
+				if (i==savedIndividuals.length-1 && j==0) {
+					updateBottomLeft(individuals, savedIndividuals, iRate, rRate, i, j);
 				}
 				
-				if (i==individuals.length-1 && j==individuals.length-1) {
-					updateBottomRight(individuals, iRate, rRate, i, j);
+				if (i==savedIndividuals.length-1 && j==savedIndividuals.length-1) {
+					updateBottomRight(individuals, savedIndividuals, iRate, rRate, i, j);
 				}
 				
 				
-				if (j==0 && i>0 && i<individuals.length-1) {
-					updateLeftColumn(individuals, iRate, rRate, i, j);
+				if (j==0 && i>0 && i<savedIndividuals.length-1) {
+					updateLeftColumn(individuals, savedIndividuals, iRate, rRate, i, j);
 				}
 				
-				if (i==0 && j>0 && j<individuals.length-1) {
-					updateTopRow(individuals, iRate, rRate, i, j);
+				if (i==0 && j>0 && j<savedIndividuals.length-1) {
+					updateTopRow(individuals, savedIndividuals, iRate, rRate, i, j);
 				}
 				
-				if (j==individuals.length-1 && i>0 && i<individuals.length-1) {
-					updateRightColumn(individuals, iRate, rRate, i, j);
+				if (j==savedIndividuals.length-1 && i>0 && i<savedIndividuals.length-1) {
+					updateRightColumn(individuals, savedIndividuals, iRate, rRate, i, j);
 				}
 				
-				if (i==individuals.length-1 && j>0 && j<individuals.length-1) {
-					updateBottomRow(individuals, iRate, rRate, i, j);
+				if (i==savedIndividuals.length-1 && j>0 && j<savedIndividuals.length-1) {
+					updateBottomRow(individuals, savedIndividuals, iRate, rRate, i, j);
 				}
 				
-				if (i>0 && i<individuals.length-1 && j>0 && j<individuals.length-1) {
-					updateMiddle(individuals, iRate, rRate, i, j);
+				if (i>0 && i<savedIndividuals.length-1 && j>0 && j<savedIndividuals.length-1) {
+					updateMiddle(individuals, savedIndividuals, iRate, rRate, i, j);
 				}
 						
 			}
@@ -185,9 +192,9 @@ public class Main {
 	
 	
 	
-	static void updateMiddle(String[][] individuals, double iRate, double rRate, int i, int j) {
+	static void updateMiddle(String[][] individuals, String[][] savedIndividuals, double iRate, double rRate, int i, int j) {
 		
-		if (individuals[i][j] == "I") {
+		if (savedIndividuals[i][j] == "I") {
 			boolean isRecovered = randRec(rRate);
 			
 			if (isRecovered == true) {
@@ -196,20 +203,20 @@ public class Main {
 			
 		}
 		
-		if (individuals[i][j]=="S") {
-			if (individuals[i][j-1]=="I") {
+		if (savedIndividuals[i][j]=="S") {
+			if (savedIndividuals[i][j-1]=="I") {
 				infected++;
 			}
 			
-			if (individuals[i][j+1]=="I") {
+			if (savedIndividuals[i][j+1]=="I") {
 				infected++;
 			}
 			
-			if (individuals[i-1][j]=="I") {
+			if (savedIndividuals[i-1][j]=="I") {
 				infected++;
 			}
 			
-			if (individuals[i+1][j]=="I") {
+			if (savedIndividuals[i+1][j]=="I") {
 				infected++;
 			}
 			
@@ -226,8 +233,8 @@ public class Main {
 	}
 	
 	
-	static void updateBottomRow(String[][] individuals, double iRate, double rRate, int i, int j) {
-		if (individuals[i][j] == "I") {
+	static void updateBottomRow(String[][] individuals, String[][] savedIndividuals, double iRate, double rRate, int i, int j) {
+		if (savedIndividuals[i][j] == "I") {
 			boolean isRecovered = randRec(rRate);
 			
 			if (isRecovered == true) {
@@ -236,52 +243,16 @@ public class Main {
 			
 		}
 		
-		if (individuals[i][j]=="S") {
-			if (individuals[individuals.length-1][j-1]=="I") {
+		if (savedIndividuals[i][j]=="S") {
+			if (savedIndividuals[savedIndividuals.length-1][j-1]=="I") {
 				infected++;
 			}
 			
-			if (individuals[individuals.length-1][j+1]=="I") {
+			if (savedIndividuals[savedIndividuals.length-1][j+1]=="I") {
 				infected++;
 			}
 			
-			if (individuals[individuals.length-2][j]=="I") {
-				infected++;
-			}
-			
-			boolean is_Infected = randInf(iRate, infected);
-			
-			if (is_Infected==true) {
-				individuals[i][j] = "I";
-			}
-			
-			infected = 0;
-		}	
-	}
-	
-	
-	
-	
-	static void updateRightColumn(String[][] individuals, double iRate, double rRate, int i, int j) {
-		if (individuals[i][j] == "I") {
-			boolean isRecovered = randRec(rRate);
-			
-			if (isRecovered == true) {
-				individuals[i][j] = "R";
-			}
-			
-		}
-		
-		if (individuals[i][j]=="S") {
-			if (individuals[i-1][j]=="I") {
-				infected++;
-			}
-			
-			if (individuals[i+1][j]=="I") {
-				infected++;
-			}
-			
-			if (individuals[i][j-1]=="I") {
+			if (savedIndividuals[savedIndividuals.length-2][j]=="I") {
 				infected++;
 			}
 			
@@ -298,8 +269,8 @@ public class Main {
 	
 	
 	
-	static void updateTopRow(String [][] individuals, double iRate, double rRate, int i, int j) {
-		if (individuals[i][j] == "I") {
+	static void updateRightColumn(String[][] individuals, String[][] savedIndividuals, double iRate, double rRate, int i, int j) {
+		if (savedIndividuals[i][j] == "I") {
 			boolean isRecovered = randRec(rRate);
 			
 			if (isRecovered == true) {
@@ -308,16 +279,52 @@ public class Main {
 			
 		}
 		
-		if (individuals[i][j]=="S") {
-			if (individuals[0][j-1]=="I") {
+		if (savedIndividuals[i][j]=="S") {
+			if (savedIndividuals[i-1][j]=="I") {
 				infected++;
 			}
 			
-			if (individuals[0][j+1]=="I") {
+			if (savedIndividuals[i+1][j]=="I") {
 				infected++;
 			}
 			
-			if (individuals[1][j]=="I") {
+			if (savedIndividuals[i][j-1]=="I") {
+				infected++;
+			}
+			
+			boolean is_Infected = randInf(iRate, infected);
+			
+			if (is_Infected==true) {
+				individuals[i][j] = "I";
+			}
+			
+			infected = 0;
+		}	
+	}
+	
+	
+	
+	
+	static void updateTopRow(String [][] individuals, String[][] savedIndividuals, double iRate, double rRate, int i, int j) {
+		if (savedIndividuals[i][j] == "I") {
+			boolean isRecovered = randRec(rRate);
+			
+			if (isRecovered == true) {
+				individuals[i][j] = "R";
+			}
+			
+		}
+		
+		if (savedIndividuals[i][j]=="S") {
+			if (savedIndividuals[0][j-1]=="I") {
+				infected++;
+			}
+			
+			if (savedIndividuals[0][j+1]=="I") {
+				infected++;
+			}
+			
+			if (savedIndividuals[1][j]=="I") {
 				infected++;
 			}
 			
@@ -335,8 +342,8 @@ public class Main {
 	
 	
 	
-	static void updateLeftColumn (String[][] individuals, double iRate, double rRate, int i, int j) {
-		if (individuals[i][j] == "I") {
+	static void updateLeftColumn (String[][] individuals, String[][] savedIndividuals, double iRate, double rRate, int i, int j) {
+		if (savedIndividuals[i][j] == "I") {
 			boolean isRecovered = randRec(rRate);
 			
 			if (isRecovered == true) {
@@ -345,16 +352,16 @@ public class Main {
 			
 		}
 		
-		if (individuals[i][j]=="S") {
-			if (individuals[i-1][0]=="I") {
+		if (savedIndividuals[i][j]=="S") {
+			if (savedIndividuals[i-1][0]=="I") {
 				infected++;
 			}
 			
-			if (individuals[i+1][0]=="I") {
+			if (savedIndividuals[i+1][0]=="I") {
 				infected++;
 			}
 			
-			if (individuals[i][1]=="I") {
+			if (savedIndividuals[i][1]=="I") {
 				infected++;
 			}
 			
@@ -370,9 +377,9 @@ public class Main {
 	}
 	
 	
-	static void updateTopLeft(String individuals[][], double iRate, double rRate) {
+	static void updateTopLeft(String individuals[][], String[][] savedIndividuals, double iRate, double rRate) {
 		
-		if (individuals[0][0] == "I") {
+		if (savedIndividuals[0][0] == "I") {
 			boolean isRecovered = randRec(rRate);
 			
 			if (isRecovered == true) {
@@ -381,12 +388,12 @@ public class Main {
 			
 		}
 		
-		if (individuals[0][0]=="S") {
-			if (individuals[0][1]=="I") {
+		if (savedIndividuals[0][0]=="S") {
+			if (savedIndividuals[0][1]=="I") {
 				infected++;
 			}
 			
-			if (individuals[1][0]=="I") {
+			if (savedIndividuals[1][0]=="I") {
 				infected++;
 			}
 			
@@ -402,9 +409,9 @@ public class Main {
 	}
 	
 	
-	static void updateTopRight(String individuals[][], double iRate, double rRate, int i, int j) {
+	static void updateTopRight(String individuals[][], String[][] savedIndividuals, double iRate, double rRate, int i, int j) {
 		
-		if (individuals[i][j] == "I") {
+		if (savedIndividuals[i][j] == "I") {
 			boolean isRecovered = randRec(rRate);
 			
 			if (isRecovered == true) {
@@ -413,12 +420,12 @@ public class Main {
 			
 		}
 		
-		if (individuals[i][j]=="S") {
-			if (individuals[0][individuals.length-2]=="I") {
+		if (savedIndividuals[i][j]=="S") {
+			if (savedIndividuals[0][savedIndividuals.length-2]=="I") {
 				infected++;
 			}
 			
-			if (individuals[1][individuals.length-1]=="I") {
+			if (savedIndividuals[1][savedIndividuals.length-1]=="I") {
 				infected++;
 			}
 			
@@ -436,8 +443,8 @@ public class Main {
 	}
 	
 	
-	static void updateBottomLeft(String individuals[][], double iRate, double rRate, int i, int j) {
-		if (individuals[i][j] == "I") {
+	static void updateBottomLeft(String individuals[][], String[][] savedIndividuals, double iRate, double rRate, int i, int j) {
+		if (savedIndividuals[i][j] == "I") {
 			boolean isRecovered = randRec(rRate);
 			
 			if (isRecovered == true) {
@@ -446,12 +453,12 @@ public class Main {
 			
 		}
 		
-		if (individuals[i][j]=="S") {
-			if (individuals[individuals.length-1][1]=="I") {
+		if (savedIndividuals[i][j]=="S") {
+			if (savedIndividuals[savedIndividuals.length-1][1]=="I") {
 				infected++;
 			}
 			
-			if (individuals[individuals.length-2][0]=="I") {
+			if (savedIndividuals[savedIndividuals.length-2][0]=="I") {
 				infected++;
 			}
 			
@@ -467,9 +474,9 @@ public class Main {
 	}
 	
 	
-	static void updateBottomRight(String[][] individuals, double iRate, double rRate, int i, int j) {
+	static void updateBottomRight(String[][] individuals, String[][] savedIndividuals, double iRate, double rRate, int i, int j) {
 		
-		if (individuals[i][j] == "I") {
+		if (savedIndividuals[i][j] == "I") {
 			boolean isRecovered = randRec(rRate);
 			
 			if (isRecovered == true) {
@@ -478,12 +485,12 @@ public class Main {
 			
 		}
 		
-		if (individuals[i][j]=="S") {
-			if (individuals[individuals.length-1][individuals.length-2]=="I") {
+		if (savedIndividuals[i][j]=="S") {
+			if (savedIndividuals[savedIndividuals.length-1][savedIndividuals.length-2]=="I") {
 				infected++;
 			}
 			
-			if (individuals[individuals.length-2][individuals.length-1]=="I") {
+			if (savedIndividuals[savedIndividuals.length-2][savedIndividuals.length-1]=="I") {
 				infected++;
 			}
 			
