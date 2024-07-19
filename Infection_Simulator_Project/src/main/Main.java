@@ -75,6 +75,9 @@ public class Main {
 		try {
 			
 			for (int i = 0; i < T; i++) {
+				
+				savedIndividuals = individuals;
+				
 				goThroughIndividuals(individuals, savedIndividuals, iRate, rRate);
 				
 				BufferedWriter textWriter = new BufferedWriter(new FileWriter("C:\\Users\\mughl\\OneDrive\\Desktop\\outputs" + "\\output" + i + ".txt"));
