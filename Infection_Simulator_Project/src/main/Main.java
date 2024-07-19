@@ -1,5 +1,8 @@
 package main;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -10,6 +13,7 @@ public class Main {
 	
 	static Random random = new Random();
 	static int infected = 0;
+	static int T = 0;
 	static Scanner scnr = new Scanner(System.in);
 	
 	public static void main(String[] args) {
@@ -29,7 +33,7 @@ public class Main {
 		}
 		
 		System.out.println("Enter the number of time steps:");
-		int T = scnr.nextInt();
+		T = scnr.nextInt();
 		
 		System.out.println("Enter the infection rate:");
 		double iRate = scnr.nextDouble();
@@ -74,13 +78,15 @@ public class Main {
 		
 		try {
 			
+			fileDeleter();
+			
 			for (int i = 0; i < T; i++) {
 				
 				savedIndividuals = individuals;
 				
 				goThroughIndividuals(individuals, savedIndividuals, iRate, rRate);
 				
-				BufferedWriter textWriter = new BufferedWriter(new FileWriter("C:\\Users\\mughl\\OneDrive\\Desktop\\outputs" + "\\output" + i + ".txt"));
+				BufferedWriter textWriter = new BufferedWriter(new FileWriter("C:\\Users\\mughl\\eclipse-workspace\\Infection_Simulator_Project\\outputs" + "\\output" + i + ".txt"));
 				
 				for (int a=0; a<individuals.length; a++) {
 					textWriter.write("\n");
@@ -113,6 +119,9 @@ public class Main {
 				infected = 0;
 				susceptible = 0;
 				
+				BufferedWriter setNumO = new BufferedWriter(new FileWriter("C:\\Users\\mughl\\eclipse-workspace\\Infection_Simulator_Project\\src\\numOutputs\\numO.txt"));
+				setNumO.write(String.valueOf(T));
+				setNumO.close();
 			}
 		
 		} catch (IOException e) {
@@ -131,7 +140,34 @@ public class Main {
 	}
 	
 	
-	
+	static void fileDeleter() {
+		
+		try {
+			
+			BufferedReader getNumO = new BufferedReader(new FileReader("C:\\Users\\mughl\\eclipse-workspace\\Infection_Simulator_Project\\src\\numOutputs\\numO.txt"));
+			
+			int numO = getNumO.read();
+		
+			
+			for (int z = 0; z < numO; z++) {
+				File file = new File("output"+ z + ".txt");
+				file.delete();
+			}
+			
+			
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+	}
 	
 	static void goThroughIndividuals(String[][] individuals, String[][] savedIndividuals, double iRate, double rRate) {
 		for (int i=0; i<savedIndividuals.length; i++) {
