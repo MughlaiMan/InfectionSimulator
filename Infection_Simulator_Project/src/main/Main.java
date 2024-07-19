@@ -86,7 +86,7 @@ public class Main {
 				
 				goThroughIndividuals(individuals, savedIndividuals, iRate, rRate);
 				
-				BufferedWriter textWriter = new BufferedWriter(new FileWriter("outputs" + "\\output" + i + ".txt"));
+				BufferedWriter textWriter = new BufferedWriter(new FileWriter("outputs" + "\\output" + (i + 1) + ".txt"));
 				
 				for (int a=0; a<individuals.length; a++) {
 					textWriter.write("\n");
@@ -150,7 +150,7 @@ public class Main {
 		
 			
 			for (int z = 0; z < numO; z++) {
-				File file = new File("outputs"+ "\\output" + z + ".txt");
+				File file = new File("outputs"+ "\\output" + (z + 1) + ".txt");
 				file.delete();
 			}
 			
