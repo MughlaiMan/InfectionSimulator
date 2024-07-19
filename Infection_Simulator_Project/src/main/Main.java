@@ -86,7 +86,7 @@ public class Main {
 				
 				goThroughIndividuals(individuals, savedIndividuals, iRate, rRate);
 				
-				BufferedWriter textWriter = new BufferedWriter(new FileWriter("C:\\Users\\mughl\\eclipse-workspace\\Infection_Simulator_Project\\outputs" + "\\output" + i + ".txt"));
+				BufferedWriter textWriter = new BufferedWriter(new FileWriter("outputs" + "\\output" + i + ".txt"));
 				
 				for (int a=0; a<individuals.length; a++) {
 					textWriter.write("\n");
@@ -119,7 +119,7 @@ public class Main {
 				infected = 0;
 				susceptible = 0;
 				
-				BufferedWriter setNumO = new BufferedWriter(new FileWriter("C:\\Users\\mughl\\eclipse-workspace\\Infection_Simulator_Project\\src\\numOutputs\\numO.txt"));
+				BufferedWriter setNumO = new BufferedWriter(new FileWriter("src\\numOutputs\\numO.txt"));
 				setNumO.write(String.valueOf(T));
 				setNumO.close();
 			}
@@ -144,13 +144,13 @@ public class Main {
 		
 		try {
 			
-			BufferedReader getNumO = new BufferedReader(new FileReader("C:\\Users\\mughl\\eclipse-workspace\\Infection_Simulator_Project\\src\\numOutputs\\numO.txt"));
+			BufferedReader getNumO = new BufferedReader(new FileReader("src\\numOutputs\\numO.txt"));
 			
 			int numO = getNumO.read();
 		
 			
 			for (int z = 0; z < numO; z++) {
-				File file = new File("output"+ z + ".txt");
+				File file = new File("outputs"+ "\\output" + z + ".txt");
 				file.delete();
 			}
 			
