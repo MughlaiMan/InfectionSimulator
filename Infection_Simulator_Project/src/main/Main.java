@@ -52,10 +52,10 @@ public class Main {
 		}
 		
 		
+		
+		// Making an array to store initial and updated statuses of individuals.
 		String [][] individuals = new String[(int) Math.sqrt(N)][(int) Math.sqrt(N)];
-		
-		String [][] savedIndividuals = individuals; 
-		
+				
 		for (int i=0; i<individuals.length; i++) {
 			for (int j=0; j<individuals[i].length; j++) {
 				individuals[i][j] = "S";
@@ -67,27 +67,53 @@ public class Main {
 		
 		individuals[rand1][rand2] = "I";
 		
-		/*
-		timeStepClass.setNumIndividuals(N);
-		timeStepClass.setNumTimeSteps(T);
-		timeStepClass.setInfectionRate(iRate);
-		timeStepClass.setRecoveryRate(rRate);
-		*/
+		
+		
+		
+		// Making an array to store initial status of individuals and the status of individuals from the previous time step.
+		String [][] savedIndividuals = new String[(int) Math.sqrt(N)][(int) Math.sqrt(N)]; 
+		
+		for (int i=0; i<savedIndividuals.length; i++) {
+			for (int j=0; j<savedIndividuals[i].length; j++) {
+				savedIndividuals[i][j] = "S";
+			}
+		}
+		
+		savedIndividuals[rand1][rand2] = "I";
+		
+		
 		
 		
 		
 		try {
 			
+			// Prints the initial status of the individuals
+			System.out.println("Initial Statuses");
+			for (int i=0; i<savedIndividuals.length; i++) {
+				System.out.println();
+				for (int j=0; j<savedIndividuals[i].length; j++) {
+					System.out.print(savedIndividuals[i][j]);
+					System.out.print(" ");
+				}
+			}
+			
+			System.out.println();
+			
+			
+			
+			
 			fileDeleter();
 			
+			
+			
+			
+			// The for loop below completes every time step.
 			for (int i = 0; i < T; i++) {
-				
-				savedIndividuals = individuals;
-				
 				goThroughIndividuals(individuals, savedIndividuals, iRate, rRate);
 				
 				BufferedWriter textWriter = new BufferedWriter(new FileWriter("outputs" + "\\output" + (i + 1) + ".txt"));
 				
+				//Writes the status of individuals after every time step, to files
 				for (int a=0; a<individuals.length; a++) {
 					textWriter.write("\n");
 					for (int j=0; j<individuals[a].length; j++) {
@@ -98,6 +124,8 @@ public class Main {
 				
 				textWriter.close();
 				
+				
+				//For outputting how many are infected, recovered, or susceptible
 				for (int b=0; b<individuals.length; b++) {
 					for (int c=0; c<individuals[b].length; c++) {
 						if (individuals[b][c]=="R") {
@@ -115,10 +143,27 @@ public class Main {
 				System.out.println("The number of susceptible people is: " + susceptible);
 				System.out.println("The ratio of infected people is: " + ((double) infected/N));
 				
+				
+				
+				
 				recovered = 0;
 				infected = 0;
 				susceptible = 0;
 				
+				
+				
+				// For loop stores the status of individuals after every time step, to the second array
+				// which will be used to refer to the previous time step in the time steps to come.
+				for (int d=0; d<individuals.length; d++) {
+					for (int e=0; e<individuals[d].length; e++) {
+						savedIndividuals[d][e] = individuals[d][e];
+					}
+				}
+				
+				
+				
+				// Writes the number of time steps to a file so that the next time the program is ran,
+				// the program can reference to that number in the file so that it can delete any output files from before. 
 				BufferedWriter setNumO = new BufferedWriter(new FileWriter("src\\numOutputs\\numO.txt"));
 				setNumO.write(String.valueOf(T));
 				setNumO.close();
@@ -139,7 +184,7 @@ public class Main {
 
 	}
 	
-	
+	// The function below deletes output files from before  
 	static void fileDeleter() {
 		
 		try {
@@ -176,39 +221,21 @@ public class Main {
 				
 				if (i==0 && j==0) {
 					updateTopLeft(individuals, savedIndividuals, iRate, rRate);
-				}
-				
-				
-				if (i==0 && j==savedIndividuals.length-1) {
+				} else if (i==0 && j==savedIndividuals.length-1) {
 					updateTopRight(individuals, savedIndividuals, iRate, rRate, i, j);
-				}
-				
-				if (i==savedIndividuals.length-1 && j==0) {
+				} else if (i==savedIndividuals.length-1 && j==0) {
 					updateBottomLeft(individuals, savedIndividuals, iRate, rRate, i, j);
-				}
-				
-				if (i==savedIndividuals.length-1 && j==savedIndividuals.length-1) {
+				} else if (i==savedIndividuals.length-1 && j==savedIndividuals.length-1) {
 					updateBottomRight(individuals, savedIndividuals, iRate, rRate, i, j);
-				}
-				
-				
-				if (j==0 && i>0 && i<savedIndividuals.length-1) {
+				} else if (j==0 && i>0 && i<savedIndividuals.length-1) {
 					updateLeftColumn(individuals, savedIndividuals, iRate, rRate, i, j);
-				}
-				
-				if (i==0 && j>0 && j<savedIndividuals.length-1) {
+				} else if (i==0 && j>0 && j<savedIndividuals.length-1) {
 					updateTopRow(individuals, savedIndividuals, iRate, rRate, i, j);
-				}
-				
-				if (j==savedIndividuals.length-1 && i>0 && i<savedIndividuals.length-1) {
+				} else if (j==savedIndividuals.length-1 && i>0 && i<savedIndividuals.length-1) {
 					updateRightColumn(individuals, savedIndividuals, iRate, rRate, i, j);
-				}
-				
-				if (i==savedIndividuals.length-1 && j>0 && j<savedIndividuals.length-1) {
+				} else if (i==savedIndividuals.length-1 && j>0 && j<savedIndividuals.length-1) {
 					updateBottomRow(individuals, savedIndividuals, iRate, rRate, i, j);
-				}
-				
-				if (i>0 && i<savedIndividuals.length-1 && j>0 && j<savedIndividuals.length-1) {
+				} else if (i>0 && i<savedIndividuals.length-1 && j>0 && j<savedIndividuals.length-1) {
 					updateMiddle(individuals, savedIndividuals, iRate, rRate, i, j);
 				}
 						
@@ -216,7 +243,7 @@ public class Main {
 			
 		}
 		
-		
+		// For outputting the statuses after the time step is done.	
 		for (int i=0; i<individuals.length; i++) {
 			System.out.println();
 			for (int j=0; j<individuals[i].length; j++) {
@@ -230,7 +257,8 @@ public class Main {
 	}
 	
 	
-	
+	// All of the functions below that have "update" in their name are for handling when the program does a time step
+	// and goes through every individual for checking if they get infected, recovered, or skipped if they are already recovered.  
 	static void updateMiddle(String[][] individuals, String[][] savedIndividuals, double iRate, double rRate, int i, int j) {
 		
 		if (savedIndividuals[i][j] == "I") {
@@ -544,6 +572,11 @@ public class Main {
 		
 	}
 	
+	
+	
+	
+	// The two methods below are for determining if an individual gets infected or recovered
+	// using a java random number generator.
 	static boolean randRec(double rRate) {
 		boolean isRecovered = false;
 		double rand = random.nextDouble(1);
@@ -573,61 +606,3 @@ public class Main {
 		return isInfected;
 	}
 }
-
-
-
-
-/*
-if (i==0 && j==individuals[0].length-1) {
-	
-}
-
-if (i==individuals.length-1 && j==0) {
-	
-}
-
-if (i==individuals.length-1 && j==individuals[i].length-1) {
-	
-}
-*/
-
-
-/*
-call the do time step method which includes
-writing the status of every individual to a file.
-Then make a for loop in this file which for the
-rest of the time steps calls another function that has the 
-do time step code but with getting the status of every individual
-from the previous file.
-*/
-
-// also figure out a way of checking neighbors status.
-// Some people are in corners. Some are not.
-//timeStepClass.doTimeStep(individuals, T);
-
-
-// System.out.println(rand1 + " " + rand2);
-
-/*
-for (int i=0; i<individuals.length; i++) {
-	System.out.println();
-	for (int j=0; j<individuals[i].length; j++) {
-		System.out.print(individuals[i][j]);
-	}
-}
-*/
-
-
-/*
-for (int i=0; i<individuals.length; i++) {
-	System.out.println();
-	for (int j=0; j<individuals[i].length; j++) {
-		if ((i==0 && j==0) || (i==0 && j==individuals[0].length-1) || (i==individuals.length-1 && j==0) || (i==individuals.length-1 && j==individuals[i].length-1)) {
-			System.out.print("C");
-		} else {
-			System.out.print("N");
-
-		}
-	}
-}
-*/
