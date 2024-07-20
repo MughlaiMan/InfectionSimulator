@@ -109,7 +109,7 @@ public class Main {
 			
 			// The for loop below completes every time step.
 			for (int i = 0; i < T; i++) {
-				goThroughIndividuals(individuals, savedIndividuals, iRate, rRate);
+				goThroughIndividuals(individuals, savedIndividuals, iRate, rRate, i);
 				
 				BufferedWriter textWriter = new BufferedWriter(new FileWriter("outputs" + "\\output" + (i + 1) + ".txt"));
 				
@@ -214,7 +214,7 @@ public class Main {
 		
 	}
 	
-	static void goThroughIndividuals(String[][] individuals, String[][] savedIndividuals, double iRate, double rRate) {
+	static void goThroughIndividuals(String[][] individuals, String[][] savedIndividuals, double iRate, double rRate, int x) {
 		for (int i=0; i<savedIndividuals.length; i++) {
 			for (int j=0; j<savedIndividuals[i].length; j++) {
 				
@@ -244,6 +244,8 @@ public class Main {
 		}
 		
 		// For outputting the statuses after the time step is done.	
+		System.out.println();
+		System.out.println("Time Step " + (x + 1));
 		for (int i=0; i<individuals.length; i++) {
 			System.out.println();
 			for (int j=0; j<individuals[i].length; j++) {

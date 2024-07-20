@@ -1,7 +1,6 @@
 
-S S S S S S 
-S S S S S S 
-S S S S S S 
-S S S S S S 
-S S S S S S 
-S S S R I I 
+S S S I I 
+S S S I S 
+S S S S S 
+S S S S S 
+S S S S S 
